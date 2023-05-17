@@ -2,6 +2,7 @@ package com.example.animationproject;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -35,8 +36,19 @@ public class PulseAnimationView extends View {
         shrinkAnimation.setInterpolator(new LinearInterpolator());
         shrinkAnimation.setStartDelay(ANIMATION_DELAY);
 
-        // play grow first then shrink
-        mPulseAnimatorSet.play(growAnimator).before(shrinkAnimation);
+        // make repeat animation
+        ObjectAnimator repeatAnimator = ObjectAnimator.ofFloat(this, "radius", 0, getWidth());
+        repeatAnimator.setStartDelay(ANIMATION_DELAY);
+        repeatAnimator.setDuration(ANIMATION_DURATION);
+        repeatAnimator.setRepeatCount(3);
+        // mode reverse make the animation reversed before repeated
+        // mode restart make the animation gone before repeated
+        repeatAnimator.setRepeatMode(ObjectAnimator.REVERSE);
+
+        // play grow first then shrink then repeat 3x
+//        mPulseAnimatorSet.play(growAnimator).before(shrinkAnimation);
+        mPulseAnimatorSet.play(repeatAnimator);
+
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
