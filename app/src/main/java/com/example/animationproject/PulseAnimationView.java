@@ -45,18 +45,18 @@ public class PulseAnimationView extends View {
         super.onDraw(canvas);
         canvas.drawCircle(mX, mY, mRadius, mPaint);
 
-        if (mPulseAnimatorSet != null && mPulseAnimatorSet.isRunning()) {
-            mPulseAnimatorSet.cancel();
-        }
 
-        mPulseAnimatorSet.start();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             mX = event.getX();
             mY = event.getY();
+            if (mPulseAnimatorSet != null && mPulseAnimatorSet.isRunning()) {
+                mPulseAnimatorSet.cancel();
+            }
+            mPulseAnimatorSet.start();
         }
         return super.onTouchEvent(event);
     }
